@@ -23,8 +23,8 @@ export function Login() {
         setLoggedInUser((await authService.getCurrentUser())!);
         router.push('/profile');
       }
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      setError((e as { message: string }).message);
     }
   };
 

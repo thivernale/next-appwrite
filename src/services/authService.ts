@@ -39,7 +39,7 @@ class AuthService {
         return createdUser;
       }
     } catch (e) {
-      console.error(e);
+      throw e;
     }
   }
 

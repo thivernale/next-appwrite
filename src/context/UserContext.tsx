@@ -22,7 +22,7 @@ export const UserContextProvider = ({ children }: Readonly<{ children: React.Rea
     }).catch(reason => {
       console.error(reason);
     }).finally(() => setLoading(false));
-  }, []);
+  }, [useStateLoggedInUser]);
 
   return (
     <UserContext.Provider value={useStateLoggedInUser as UCReturnType}>
