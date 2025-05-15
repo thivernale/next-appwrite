@@ -12,7 +12,7 @@ export default function LogoutPage() {
   useEffect(() => {
     if (loggedInUser) {
       authService.logout().then(() => {
-        setLoggedInUser(null);
+        setLoggedInUser(undefined);
         router.replace('/');
       });
     } else {

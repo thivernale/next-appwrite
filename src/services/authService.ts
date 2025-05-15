@@ -25,9 +25,8 @@ class AuthService {
     try {
       return await account.get();
     } catch (e) {
-      console.error(e);
+      throw e;
     }
-    return null;
   }
 
   public async createUser({ email, password, name }: RegisterType) {

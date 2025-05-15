@@ -1,11 +1,27 @@
+'use client';
+
 import { Header } from '@/components/Header';
-import { UserContextProvider } from '@/context/UserContext';
-import React from 'react';
+import { UserContextProvider, UType } from '@/context/UserContext';
+import React, { useEffect, useState } from 'react';
 import { Blob } from '@/components/Blob';
+import { authService } from '@/services/authService';
 
 export default function CommonLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
-  return (
-    <UserContextProvider>
+  const [loggedInUser, setLoggedInUser] = useState<UType | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    void authService.getCurrentUser().then(value => {
+      if (value !== null) {
+        setLoggedInUser(value);
+      }
+    }).catch(reason => {
+      console.error(reason);
+    }).finally(() => setLoading(false));
+  }, [setLoggedInUser]);
+
+  return !loading && (
+    <UserContextProvider value={[loggedInUser, setLoggedInUser]}>
       <div className="text-primary">
         <div className="fixed -z-[1] left-1/3 w-12 top-2/3 blur-2xl">
           <Blob blur />
