@@ -1,4 +1,4 @@
-import { account, ID } from '@/services/appwrite';
+import { account, ID } from '@/models/client/config';
 
 export type RegisterType = { email: string; password: string, name: string };
 
