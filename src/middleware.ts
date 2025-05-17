@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
+import { getOrCreateDatabase } from '@/models/server/dbInit';
 import { getOrCreateStorageBucket } from '@/models/server/storage.bucket';
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(/*request: NextRequest*/) {
   // do stuff
   await getOrCreateStorageBucket();
+  await getOrCreateDatabase();
 
   return NextResponse.next();
 }

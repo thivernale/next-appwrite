@@ -7,7 +7,6 @@ client
   .setProject(environment.appwrite.projectId)
   .setKey(environment.appwrite.apiKey);
 
-
 const account = new Account(client);
 export { ID } from 'appwrite';
 
@@ -18,4 +17,8 @@ const users = new Users(client);
 
 export {
   account, avatars, databases, storage, client, users,
+};
+
+export const delay = (durationMs: number) => {
+  return new Promise(resolve => setTimeout(resolve, durationMs));
 };
