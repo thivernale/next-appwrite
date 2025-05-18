@@ -1,6 +1,7 @@
 import { account, ID } from '@/models/client/config';
+import { Models } from 'appwrite';
 
-export type RegisterType = { email: string; password: string, name: string };
+export type RegisterType = { email: string; password: string; name: string };
 
 export type LoginType = { email: string; password: string };
 
@@ -21,18 +22,18 @@ class AuthService {
     return Boolean(await this.getCurrentUser());
   };
 
-  public async getCurrentUser() {
+  public async getCurrentUser<T extends Models.Preferences>() {
     try {
-      return await account.get();
+      return await account.get<T>();
     } catch (e) {
       throw e;
     }
   }
 
-  public async createUser({ email, password, name }: RegisterType) {
+  public async createUser({ email, password, name }: RegisterType, loginAfter = true) {
     try {
       const createdUser = await account.create(ID.unique(), email, password, name);
-      if (createdUser) {
+      if (createdUser && loginAfter) {
         return this.login({ email, password });
       } else {
         return createdUser;
@@ -52,6 +53,18 @@ class AuthService {
     } catch (e) {
       console.error(e);
     }
+  }
+
+  public async getCurrentSession() {
+    return (await account.getSession('current'));
+  }
+
+  public async createJWT() {
+    return (await account.createJWT());
+  }
+
+  public async updatePrefs<T extends Models.Preferences>(prefs: T) {
+    return (await account.updatePrefs(prefs));
   }
 }
 
