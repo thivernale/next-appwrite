@@ -9,10 +9,13 @@ const menuItems = [
     name: 'Home',
     href: '/',
   },
+  {
+    name: 'Forum',
+    href: '/forum',
+  },
 ];
 
 export function Header() {
-
   const [loggedInUser] = useUserContext();
 
   return (
@@ -29,7 +32,7 @@ export function Header() {
               <li key={item.name}>
                 <Link
                   href={item.href}
-                  className="inline-flex items-center text-sm font-semibold text-foreground hover:text-primary"
+                  className="text-foreground hover:text-primary inline-flex items-center text-sm font-semibold"
                 >
                   {item.name}
                 </Link>
@@ -42,23 +45,31 @@ export function Header() {
             <>
               <Link
                 href="/profile"
-                className="rounded-md bg-transparent px-3 py-2 text-sm font-semibold text-primary hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-              >Profile</Link>
+                className="text-primary hover:bg-primary/10 focus-visible:outline-primary rounded-md bg-transparent px-3 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                Profile
+              </Link>
               <Link
-                className="rounded-md border border-primary px-3 py-2 text-sm font-semibold text-primary shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className="border-primary text-primary focus-visible:outline-primary rounded-md border px-3 py-2 text-sm font-semibold shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2"
                 href="/logout"
-              >Logout</Link>
+              >
+                Logout
+              </Link>
             </>
           ) : (
             <>
               <Link
-                className="rounded-md bg-transparent px-3 py-2 text-sm font-semibold text-primary hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className="text-primary hover:bg-primary/10 focus-visible:outline-primary rounded-md bg-transparent px-3 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
                 href="/login"
-              >Login</Link>
+              >
+                Login
+              </Link>
               <Link
-                className="rounded-md border border-primary px-3 py-2 text-sm font-semibold text-primary shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className="border-primary text-primary focus-visible:outline-primary rounded-md border px-3 py-2 text-sm font-semibold shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2"
                 href="/register"
-              >Register</Link>
+              >
+                Register
+              </Link>
             </>
           )}
         </ul>
