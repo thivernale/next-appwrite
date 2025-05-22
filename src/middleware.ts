@@ -5,8 +5,16 @@ import { getOrCreateStorageBucket } from '@/models/server/storage.bucket';
 // This function can be marked `async` if using `await` inside
 export async function middleware(/*request: NextRequest*/) {
   // do stuff
-  await getOrCreateStorageBucket();
-  await getOrCreateDatabase();
+  Promise.all([getOrCreateStorageBucket(), getOrCreateDatabase()])
+    .then((value) => {
+      value.forEach((result) => {
+        console.log(result?.$id);
+      });
+    })
+    .catch((reason) => {
+      console.error(reason);
+    })
+    .finally(() => console.log('Done'));
 
   return NextResponse.next();
 }

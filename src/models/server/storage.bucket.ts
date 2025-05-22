@@ -1,23 +1,15 @@
 import { storage } from '@/models/server/config';
-import { ID, Permission, Query, Role } from 'node-appwrite';
+import { Models, Permission, Role } from 'node-appwrite';
 import { QUESTION_ATTACHMENT_BUCKET_ID } from '@/models/name';
 
-export async function getOrCreateStorageBucket() {
-  storage.listBuckets(
-    [Query.equal('name', QUESTION_ATTACHMENT_BUCKET_ID), Query.equal('enabled', true)],
-  )
-    .then(bucketList => {
-      if (bucketList.total > 0) {
-        console.log('Storage bucket found');
-        return bucketList.buckets[0];
-      }
-      throw new Error('Storage bucket not found, will attempt to create it');
-    })
-    .catch(reason => {
-      console.log(reason.message);
+export async function getOrCreateStorageBucket(): Promise<Models.Bucket> {
+  return storage.getBucket(QUESTION_ATTACHMENT_BUCKET_ID).catch((reason) => {
+    console.error(reason.message);
+    console.log('Attempting to create storage bucket.');
 
-      return storage.createBucket(
-        ID.unique(),
+    return storage
+      .createBucket(
+        QUESTION_ATTACHMENT_BUCKET_ID,
         QUESTION_ATTACHMENT_BUCKET_ID,
         [
           Permission.read(Role.any()),
@@ -28,14 +20,16 @@ export async function getOrCreateStorageBucket() {
         ],
         false,
         true,
-        undefined,
+        5_000_000, // 5M
         ['jpg', 'jpeg', 'png', 'gif', 'webp'],
-      ).then(bucket => {
+      )
+      .then((bucket) => {
         console.log('Storage bucket created');
         return bucket;
       })
-        .catch(reason => {
-          console.log(reason.message);
-        });
-    });
+      .catch((reason) => {
+        console.error(reason.message);
+        throw new Error(reason);
+      });
+  });
 }
