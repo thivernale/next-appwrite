@@ -3,6 +3,7 @@
 import { useAuthStore } from '@/store/Auth';
 import { FloatingNav, NavItem } from '@/components/ui/floating-navbar';
 import { IconHome, IconMessage, IconWorldQuestion } from '@tabler/icons-react';
+import { slugify } from '@/utils/slugify';
 
 export function Header() {
   const { session, user, logout } = useAuthStore();
@@ -22,7 +23,7 @@ export function Header() {
   if (user) {
     navItems.push({
       name: 'Profile',
-      link: `users/${user.$id}/${user.name as string}`, // TODO slugify
+      link: `users/${user.$id}/${slugify(user.name as string)}`,
       icon: <IconMessage className="h-4 w-4 text-neutral-500 dark:text-white" />,
     });
   }
