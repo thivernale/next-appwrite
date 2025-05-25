@@ -23,7 +23,7 @@ export function Header() {
   if (user) {
     navItems.push({
       name: 'Profile',
-      link: `users/${user.$id}/${slugify(user.name as string)}`,
+      link: `/forum/users/${user.$id}/${slugify(user.name as string)}`,
       icon: <IconMessage className="h-4 w-4 text-neutral-500 dark:text-white" />,
     });
   }

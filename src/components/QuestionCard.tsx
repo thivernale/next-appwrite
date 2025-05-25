@@ -13,7 +13,7 @@ export function QuestionCard({ question }: { question: Document<QuestionSummary>
       </div>
       <div className="relative w-full">
         <Link
-          href={`questions/${question.$id}/${slugify(question.title)}`}
+          href={`/forum/questions/${question.$id}/${slugify(question.title)}`}
           className="text-green-500 duration-200 hover:text-green-600 dark:text-green-300 hover:dark:text-green-400"
         >
           <h2 className="text-xl">{question.title}</h2>
@@ -22,7 +22,7 @@ export function QuestionCard({ question }: { question: Document<QuestionSummary>
           {question.tags.map((tag: string) => (
             <Link
               key={tag}
-              href={`questions?tag=${tag}`}
+              href={`/forum/questions?tag=${tag}`}
               className="bg-accent/10 hover:bg-accent/20 inline-block rounded-lg px-2 py-0.5 duration-200"
             >
               #{tag}
@@ -37,7 +37,7 @@ export function QuestionCard({ question }: { question: Document<QuestionSummary>
               />
             </picture>
             <Link
-              href={`users/${question.author.$id}/${slugify(question.author.name)}`}
+              href={`/forum/users/${question.author.$id}/${slugify(question.author.name)}`}
               className="text-green-500 hover:text-green-600"
             >
               {question.author.name}

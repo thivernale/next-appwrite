@@ -17,13 +17,13 @@ export default async function QuestionListPage({
     limit: LIMIT,
     search: { search, tag },
   });
-  console.log(questions);
+
   return (
     <div className="container mx-auto px-4 pt-36 pb-20">
       <div className="mb-10 flex items-center justify-between">
         <h1 className="text-3xl font-bold">All Questions</h1>
         <Link
-          href="questions/ask"
+          href="/forum/questions/ask"
           className="bg-accent hover:bg-accent/30 shrink-0 rounded-md px-4 py-2 font-bold"
         >
           <span className="text-center text-sm leading-none font-medium tracking-tight whitespace-pre-wrap lg:text-lg">

@@ -13,6 +13,7 @@
   "dependencies": {
     "@radix-ui/react-label": "^2.1.6",
     "@tabler/icons-react": "^3.33.0",
+    "@uiw/react-md-editor": "^4.0.7",
     "appwrite": "^17.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

@@ -1,5 +1,5 @@
-import { DocumentList, QuestionSummary, SearchParams } from '@/services/types';
-import { Models, Query } from 'appwrite';
+import { Document, DocumentList, Question, QuestionSummary, SearchParams } from '@/services/types';
+import { ID, Models, Query } from 'appwrite';
 import { databases, users } from '@/models/server/config';
 import { DATABASE_ID, QUESTION_COLLECTION_ID } from '@/models/name';
 import { UserPreferences } from '@/store/Auth';
@@ -32,14 +32,45 @@ export async function searchQuestions({
     queries,
   );
 
-  if (questions.documents.length > 0) {
-    const authorIds = [...new Set(questions.documents.map((d) => d.authorId))];
-    const authors = await users.list<UserPreferences>([Query.equal('$id', authorIds)]);
-
-    questions.documents.forEach((document) => {
-      document.author = authors.users.find((user) => user.$id === document.authorId);
-    });
-  }
+  await getAuthors(questions.documents);
 
   return questions as DocumentList<QuestionSummary>;
+}
+
+async function getAuthors(documents: Models.Document[], authorIdProp: string = 'authorId') {
+  if (documents && documents.length > 0) {
+    const authorIds = [...new Set(documents.map((d) => d[authorIdProp]))];
+    const authors = await users.list<UserPreferences>([Query.equal('$id', authorIds)]);
+
+    documents.forEach((document) => {
+      document.author = authors.users.find((user) => user.$id === document[authorIdProp]);
+    });
+  }
+}
+
+export async function getQuestion(id: string): Promise<Document<Question>> {
+  return databases
+    .getDocument<Models.Document & Question>(DATABASE_ID, QUESTION_COLLECTION_ID, id)
+    .then(async (question) => {
+      const user = await users.get<UserPreferences>(question.authorId);
+
+      await getAuthors(question.answersRel);
+      question.answersRel.forEach(async (a) => {
+        await getAuthors(a.commentsRel);
+      });
+      await getAuthors(question.commentsRel);
+
+      return {
+        ...question,
+        author: user,
+      };
+    });
+}
+
+export async function createQuestion(data: Question) {
+  return await databases.createDocument(DATABASE_ID, QUESTION_COLLECTION_ID, ID.unique(), data);
+}
+
+export async function updateQuestion(id: string, data: Question) {
+  return await databases.updateDocument(DATABASE_ID, QUESTION_COLLECTION_ID, id, data);
 }

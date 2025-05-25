@@ -1,5 +1,5 @@
 export function slugify(text: string) {
-  return text
+  return (text ?? '')
     .toString()
     .toLowerCase()
     .replace(/\s+/g, '-')
