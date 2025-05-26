@@ -3,11 +3,19 @@ import { convertDateToRelativeTime } from '@/utils/relativeTime';
 import { Comments } from '@/components/Comments';
 import { Answer, Document } from '@/services/types';
 import { AuthorInfo } from '@/components/AuthorInfo';
+import { AddAnswer } from '@/components/AddAnswer';
 
-export function Answers({ answers }: { answers: Document<Answer>[]; questionId?: string }) {
+export function Answers({
+  answers,
+  questionId,
+}: {
+  answers: Document<Answer>[];
+  questionId: string;
+}) {
   return (
     <div>
       <h2 className="mb-4 text-xl">{answers.length ?? 0} Answers</h2>
+
       {answers?.map((answer) => (
         <div key={answer.$id} className="flex gap-4">
           <div className="flex shrink-0 flex-col items-center gap-4">TODO votes, edit, delete</div>
@@ -30,8 +38,10 @@ export function Answers({ answers }: { answers: Document<Answer>[]; questionId?:
           </div>
         </div>
       ))}
+
       <hr className="border-secondary my-4 w-full" />
-      TODO add answer form
+
+      <AddAnswer />
     </div>
   );
 }

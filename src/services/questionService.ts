@@ -1,3 +1,5 @@
+'use server';
+
 import { Document, DocumentList, Question, QuestionSummary, SearchParams } from '@/services/types';
 import { ID, Models, Query } from 'appwrite';
 import { databases, users } from '@/models/server/config';
@@ -50,7 +52,7 @@ async function getAuthors(documents: Models.Document[], authorIdProp: string = '
 
 export async function getQuestion(id: string): Promise<Document<Question>> {
   return databases
-    .getDocument<Models.Document & Question>(DATABASE_ID, QUESTION_COLLECTION_ID, id)
+    .getDocument<Document<Question>>(DATABASE_ID, QUESTION_COLLECTION_ID, id)
     .then(async (question) => {
       const user = await users.get<UserPreferences>(question.authorId);
 
@@ -67,10 +69,10 @@ export async function getQuestion(id: string): Promise<Document<Question>> {
     });
 }
 
-export async function createQuestion(data: Question) {
+export async function createQuestion(data: Question): Promise<Document<Question>> {
   return await databases.createDocument(DATABASE_ID, QUESTION_COLLECTION_ID, ID.unique(), data);
 }
 
-export async function updateQuestion(id: string, data: Question) {
+export async function updateQuestion(id: string, data: Question): Promise<Document<Question>> {
   return await databases.updateDocument(DATABASE_ID, QUESTION_COLLECTION_ID, id, data);
 }
