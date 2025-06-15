@@ -14,7 +14,7 @@ export function Answers({
 }) {
   return (
     <div>
-      <h2 className="mb-4 text-xl">{answers.length ?? 0} Answers</h2>
+      <h2 className="mb-4 text-xl font-bold">{answers.length ?? 0} Answers</h2>
 
       {answers?.map((answer) => (
         <div key={answer.$id} className="flex gap-4">
@@ -25,10 +25,10 @@ export function Answers({
 
             <div className="flex w-full justify-end">
               <div>
-                <div className="text-secondary text-sm">
+                <div className="text-secondary text-sm" title={answer.$createdAt}>
                   answered {convertDateToRelativeTime(new Date(answer.$createdAt))}
                 </div>
-                <AuthorInfo author={answer.author ?? { $id: answer.authorId }} />
+                <AuthorInfo author={answer.author ?? { $id: answer.authorId, name: 'unknown' }} />
               </div>
             </div>
 

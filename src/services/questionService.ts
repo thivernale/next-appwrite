@@ -56,11 +56,12 @@ export async function getQuestion(id: string): Promise<Document<Question>> {
     .then(async (question) => {
       const user = await users.get<UserPreferences>(question.authorId);
 
-      await getAuthors(question.answersRel);
-      question.answersRel.forEach(async (a) => {
-        await getAuthors(a.commentsRel);
-      });
-      await getAuthors(question.commentsRel);
+      const authorPromises: Promise<void>[] = [
+        getAuthors(question.answersRel),
+        getAuthors(question.commentsRel),
+        ...question.answersRel.map((a) => getAuthors(a.commentsRel)),
+      ];
+      await Promise.all(authorPromises);
 
       return {
         ...question,

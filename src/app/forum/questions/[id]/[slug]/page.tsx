@@ -1,18 +1,20 @@
 'use client';
 
-import { getQuestion } from '@/services/questionService';
-import { convertDateToRelativeTime } from '@/utils/relativeTime';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { getAttachment } from '@/services/storageService';
+import { useRouter } from 'next/navigation';
 import { ChevronDown, ChevronUp, ChevronUpCircle, Pencil, Trash2 } from 'lucide-react';
+
 import { MDEditorPreview } from '@/components/MDEditor';
 import { Answers } from '@/components/Answers';
 import { Comments } from '@/components/Comments';
 import { AuthorInfo } from '@/components/AuthorInfo';
-import { useEffect, useState } from 'react';
 import { QuestionContextProvider } from '@/context/QuestionContext';
+import { getQuestion } from '@/services/questionService';
+import { getAttachment } from '@/services/storageService';
 import { Document, Question } from '@/services/types';
-import { useRouter } from 'next/navigation';
+import { convertDateToRelativeTime } from '@/utils/relativeTime';
+import { slugify } from '@/utils/slugify';
 
 export default function QuestionViewPage({
   params,
@@ -44,7 +46,9 @@ export default function QuestionViewPage({
           <div className="w-full">
             <h1 className="mb-1 text-3xl font-bold">{question.title}</h1>
             <div className="flex justify-start gap-4">
-              <span>asked {convertDateToRelativeTime(new Date(question.$createdAt))}</span>
+              <span title={question.$createdAt}>
+                asked {convertDateToRelativeTime(new Date(question.$createdAt))}
+              </span>
               <span>{question.votesRel?.length ?? 0} votes</span>
               <span>{question.answersRel?.length ?? 0} answers</span>
             </div>
@@ -93,7 +97,7 @@ export default function QuestionViewPage({
               ))}
             </div>
             <div className="flex w-full justify-end">
-              <AuthorInfo author={question.author} />
+              <AuthorInfo author={question.author ?? { $id: question.authorId, name: 'unknown' }} />
             </div>
             <div className="flex flex-col items-start gap-2">
               <Comments comments={question.commentsRel} type={'question'} typeId={question.$id} />
