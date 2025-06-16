@@ -8,7 +8,7 @@ import { createAnswer } from '@/services/answerService';
 import { useQuestionContext } from '@/context/QuestionContext';
 
 type FormState = {
-  error?: { message: string };
+  error?: { message: string; error?: unknown };
   success?: boolean;
 };
 
@@ -64,6 +64,7 @@ export function AddAnswer() {
         success: false,
         error: {
           message: 'Error creating answer',
+          error,
         },
       };
     }
