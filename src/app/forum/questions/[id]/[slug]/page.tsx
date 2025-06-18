@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChevronDown, ChevronUp, ChevronUpCircle, Pencil, Trash2 } from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronUpCircle, Pencil } from 'lucide-react';
 
 import { MDEditorPreview } from '@/components/MDEditor';
 import { Answers } from '@/components/Answers';
@@ -14,7 +14,7 @@ import { getQuestion } from '@/services/questionService';
 import { getAttachment } from '@/services/storageService';
 import { Document, Question } from '@/services/types';
 import { convertDateToRelativeTime } from '@/utils/relativeTime';
-import { slugify } from '@/utils/slugify';
+import { DeleteQuestion } from '@/app/forum/questions/[id]/[slug]/DeleteQuestion';
 
 export default function QuestionViewPage({
   params,
@@ -66,12 +66,18 @@ export default function QuestionViewPage({
 
         <div className="flex gap-4">
           <div className="flex shrink-0 flex-col items-center gap-4">
-            TODO votes, edit, delete
+            TODO votes, edit
             <ChevronUp />
             <ChevronUpCircle />
             <ChevronDown />
+            {/*<Link
+              href={`/forum/questions/${question.$id}/${slugify(question.title)}/edit`}
+              title="Edit Question"
+            >
+              <Pencil />
+            </Link>*/}
             <Pencil />
-            <Trash2 />
+            <DeleteQuestion questionId={question.$id} authorId={question.authorId} />
           </div>
 
           <div className="w-full overflow-auto">

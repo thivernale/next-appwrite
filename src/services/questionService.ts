@@ -77,3 +77,7 @@ export async function createQuestion(data: Question): Promise<Document<Question>
 export async function updateQuestion(id: string, data: Question): Promise<Document<Question>> {
   return await databases.updateDocument(DATABASE_ID, QUESTION_COLLECTION_ID, id, data);
 }
+
+export async function deleteQuestion(documentId: string): Promise<object> {
+  return databases.deleteDocument(DATABASE_ID, QUESTION_COLLECTION_ID, documentId);
+}
