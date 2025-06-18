@@ -16,13 +16,13 @@ export type QuestionSummary = {
   title: string;
   authorId: string;
   tags: string[];
-  answersRel: Document<Answer>[];
+  answersRel?: Document<Answer>[];
   // votesRel: Rel[];
 };
 export type Question = QuestionSummary & {
   content: string;
   attachmentId: string;
-  commentsRel: Document<Comment>[];
+  commentsRel?: Document<Comment>[];
   // votesRel: Document<Vote>[];
 };
 export type Answer = {

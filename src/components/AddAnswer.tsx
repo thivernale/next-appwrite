@@ -52,7 +52,7 @@ export function AddAnswer() {
 
       setQuestion({
         ...question!,
-        answersRel: [...question!.answersRel, { ...result, author: user! }],
+        answersRel: [...(question!.answersRel || []), { ...result, author: user! }],
       });
 
       setContent('');
@@ -62,10 +62,13 @@ export function AddAnswer() {
       // console.error(error);
       return {
         success: false,
-        error: {
-          message: 'Error creating answer',
-          error,
-        },
+        error:
+          error instanceof Error
+            ? error
+            : {
+                message: 'Error creating answer',
+                error,
+              },
       };
     }
   }
@@ -83,7 +86,7 @@ export function AddAnswer() {
 
         <button
           className="bg-accent hover:bg-accent/30 rounded-md px-4 py-2 disabled:text-gray-400"
-          disabled={!Boolean(content) && !isPending}
+          disabled={!Boolean(content) || isPending}
         >
           Post Your Answer
         </button>

@@ -47,7 +47,7 @@ export function Comments({
   }
 
   return (
-    <div className="flex flex-col gap-2 pl-4">
+    <div className="flex w-full flex-col gap-2 pl-4">
       {comments?.map((comment) => (
         <div key={comment.$id} className="border-b border-gray-200 p-4">
           {comment.content} -{' '}

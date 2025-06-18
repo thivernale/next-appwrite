@@ -100,7 +100,7 @@ export default function QuestionViewPage({
               <AuthorInfo author={question.author ?? { $id: question.authorId, name: 'unknown' }} />
             </div>
             <div className="flex flex-col items-start gap-2">
-              <Comments comments={question.commentsRel} type={'question'} typeId={question.$id} />
+              <Comments comments={question.commentsRel!} type={'question'} typeId={question.$id} />
 
               <hr className="border-secondary my-4 w-full" />
             </div>
@@ -108,7 +108,7 @@ export default function QuestionViewPage({
         </div>
         {/*end question*/}
 
-        <Answers answers={question.answersRel} questionId={question.$id} />
+        <Answers answers={question.answersRel!} questionId={question.$id} />
       </div>
     </QuestionContextProvider>
   );

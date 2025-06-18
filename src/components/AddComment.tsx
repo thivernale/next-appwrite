@@ -45,10 +45,13 @@ export function AddComment({ onSubmit }: { onSubmit: (arg0: string) => Promise<v
       // console.error(error);
       return {
         success: false,
-        error: {
-          message: 'Error creating comment',
-          error,
-        },
+        error:
+          error instanceof Error
+            ? error
+            : {
+                message: 'Error creating comment',
+                error,
+              },
       };
     }
   }
@@ -71,7 +74,7 @@ export function AddComment({ onSubmit }: { onSubmit: (arg0: string) => Promise<v
         ></textarea>
         <button
           className="bg-accent hover:bg-accent/30 shrink-0 rounded-md px-4 py-2 font-bold disabled:text-gray-400"
-          disabled={!Boolean(content) && !isPending}
+          disabled={!Boolean(content) || isPending}
         >
           Add Comment
         </button>

@@ -5,13 +5,7 @@ import { Answer, Document } from '@/services/types';
 import { AuthorInfo } from '@/components/AuthorInfo';
 import { AddAnswer } from '@/components/AddAnswer';
 
-export function Answers({
-  answers,
-  questionId,
-}: {
-  answers: Document<Answer>[];
-  questionId: string;
-}) {
+export function Answers({ answers }: { answers: Document<Answer>[]; questionId: string }) {
   return (
     <div>
       <h2 className="mb-4 text-xl font-bold">{answers.length ?? 0} Answers</h2>

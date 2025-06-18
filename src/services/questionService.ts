@@ -57,9 +57,9 @@ export async function getQuestion(id: string): Promise<Document<Question>> {
       const user = await users.get<UserPreferences>(question.authorId);
 
       const authorPromises: Promise<void>[] = [
-        getAuthors(question.answersRel),
-        getAuthors(question.commentsRel),
-        ...question.answersRel.map((a) => getAuthors(a.commentsRel)),
+        getAuthors(question.answersRel || []),
+        getAuthors(question.commentsRel || []),
+        ...(question.answersRel || []).map((a) => getAuthors(a.commentsRel)),
       ];
       await Promise.all(authorPromises);
 
