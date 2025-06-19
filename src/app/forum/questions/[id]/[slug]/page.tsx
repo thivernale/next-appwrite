@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChevronDown, ChevronUp, ChevronUpCircle, Pencil } from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronUpCircle } from 'lucide-react';
 
 import { MDEditorPreview } from '@/components/MDEditor';
 import { Answers } from '@/components/Answers';
@@ -15,6 +15,7 @@ import { getAttachment } from '@/services/storageService';
 import { Document, Question } from '@/services/types';
 import { convertDateToRelativeTime } from '@/utils/relativeTime';
 import { DeleteQuestion } from '@/app/forum/questions/[id]/[slug]/DeleteQuestion';
+import { EditQuestion } from '@/app/forum/questions/[id]/[slug]/EditQuestion';
 
 export default function QuestionViewPage({
   params,
@@ -66,17 +67,15 @@ export default function QuestionViewPage({
 
         <div className="flex gap-4">
           <div className="flex shrink-0 flex-col items-center gap-4">
-            TODO votes, edit
+            TODO votes
             <ChevronUp />
             <ChevronUpCircle />
             <ChevronDown />
-            {/*<Link
-              href={`/forum/questions/${question.$id}/${slugify(question.title)}/edit`}
-              title="Edit Question"
-            >
-              <Pencil />
-            </Link>*/}
-            <Pencil />
+            <EditQuestion
+              questionId={question.$id}
+              questionTitle={question.title}
+              authorId={question.authorId}
+            />
             <DeleteQuestion questionId={question.$id} authorId={question.authorId} />
           </div>
 
