@@ -14,7 +14,7 @@ type FormState = {
 
 export function AddAnswer() {
   const [content, setContent] = useState('');
-  const { user } = useAuthStore();
+  const { user, updateUserPreferences } = useAuthStore();
   const [question, setQuestion] = useQuestionContext();
   const questionId = question!.$id;
 
@@ -50,6 +50,10 @@ export function AddAnswer() {
         questionRel: questionId as unknown as Document<Question>,
       });
 
+      user.prefs.reputation = Number(user.prefs.reputation) + 1;
+      await updateUserPreferences(user.prefs);
+
+      // TODO traverse question and update author reputation
       setQuestion({
         ...question!,
         answersRel: [...(question!.answersRel || []), { ...result, author: user! }],

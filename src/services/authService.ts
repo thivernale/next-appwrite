@@ -8,8 +8,7 @@ export type LoginType = { email: string; password: string };
 class AuthService {
   private static authService: AuthService;
 
-  private constructor() {
-  }
+  private constructor() {}
 
   public static newInstance() {
     if (!AuthService.authService) {
@@ -20,7 +19,7 @@ class AuthService {
 
   public async isUserLoggedIn() {
     return Boolean(await this.getCurrentUser());
-  };
+  }
 
   public async getCurrentUser<T extends Models.Preferences>() {
     try {
@@ -56,15 +55,15 @@ class AuthService {
   }
 
   public async getCurrentSession() {
-    return (await account.getSession('current'));
+    return await account.getSession('current');
   }
 
   public async createJWT() {
-    return (await account.createJWT());
+    return await account.createJWT();
   }
 
   public async updatePrefs<T extends Models.Preferences>(prefs: T) {
-    return (await account.updatePrefs(prefs));
+    return await account.updatePrefs(prefs);
   }
 }
 

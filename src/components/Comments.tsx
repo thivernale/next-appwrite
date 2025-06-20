@@ -22,7 +22,7 @@ export function Comments({
   function handleDelete(id: string) {
     deleteComment(id)
       .then(() => {
-        setComments((prevState) => prevState.filter((value) => value.$id !== id));
+        setComments((prevState) => prevState.filter((comment) => comment.$id !== id));
       })
       .catch((reason) => console.log(reason));
   }
@@ -55,7 +55,7 @@ export function Comments({
           <span title={comment.$createdAt}>
             {convertDateToRelativeTime(new Date(comment.$createdAt))}
           </span>
-          {user!.$id === comment.authorId && (
+          {user?.$id === comment.authorId && (
             <button className="mx-2" onClick={() => handleDelete(comment.$id)}>
               <Trash2 className="h-4 w-4" />
             </button>

@@ -4,7 +4,7 @@ import { Author } from '@/services/types';
 
 export function AuthorInfo({ author }: { author: Author }) {
   return (
-    <div className="ml-auto flex items-center gap-1">
+    <div className="flex items-center justify-start gap-2">
       <picture>
         <img
           src={avatars.getInitials(author.name, 36, 36)}
@@ -12,8 +12,10 @@ export function AuthorInfo({ author }: { author: Author }) {
           className="rounded-md"
         />
       </picture>
-      <AuthorLink author={author} />
-      <p>{author.prefs?.reputation ?? 0}</p>
+      <div className="leading-tight">
+        <AuthorLink author={author} />
+        <p className="font-semibold">{author.prefs?.reputation ?? 0}</p>
+      </div>
     </div>
   );
 }

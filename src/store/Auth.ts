@@ -21,6 +21,7 @@ type AuthActions = {
   login(l: LoginType): Promise<AppwriteResult>;
   createUser(r: RegisterType): Promise<AppwriteResult>;
   logout(): Promise<void>;
+  updateUserPreferences(prefs: UserPreferences): Promise<void>;
 };
 
 type AppwriteResult = {
@@ -33,7 +34,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
     persist(
       immer(
         // persist stateCreatorFn
-        (set) => ({
+        (set, getState) => ({
           session: null,
           jwt: null,
           user: null,
@@ -60,11 +61,9 @@ export const useAuthStore = create<AuthState & AuthActions>()(
                 authService.createJWT(),
               ]);
 
-              if (!user.prefs.reputation) {
-                await authService.updatePrefs<UserPreferences>({
-                  ...user.prefs,
-                  reputation: 0,
-                });
+              if (!user.prefs.reputation && Number(user.prefs.reputation) !== 0) {
+                user.prefs.reputation = 0;
+                await authService.updatePrefs<UserPreferences>(user.prefs);
               }
 
               set({ session, user, jwt });
@@ -98,6 +97,14 @@ export const useAuthStore = create<AuthState & AuthActions>()(
           async logout(): Promise<void> {
             await authService.logout();
             set({ session: null, user: null, jwt: null });
+          },
+
+          // update in both db and state
+          async updateUserPreferences(prefs: UserPreferences) {
+            if (getState().user) {
+              const user = await authService.updatePrefs<UserPreferences>(prefs);
+              set({ user });
+            }
           },
         }),
       ),
