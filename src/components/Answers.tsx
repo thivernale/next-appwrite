@@ -4,8 +4,8 @@ import { Comments } from '@/components/Comments';
 import { Answer, Document } from '@/services/types';
 import { AuthorInfo } from '@/components/AuthorInfo';
 import { AddAnswer } from '@/components/AddAnswer';
-import { ChevronDown, ChevronUp } from 'lucide-react';
 import { DeleteAnswer } from '@/components/DeleteAnswer';
+import { VoteButtons } from '@/components/VoteButtons';
 import { useQuestionContext } from '@/context/QuestionContext';
 
 export function Answers({ answers }: { answers: Document<Answer>[]; questionId: string }) {
@@ -26,9 +26,12 @@ export function Answers({ answers }: { answers: Document<Answer>[]; questionId: 
       {answers?.map((answer) => (
         <div key={answer.$id} className="flex gap-4">
           <div className="flex shrink-0 flex-col items-center gap-4">
-            TODO votes
-            <ChevronUp />
-            <ChevronDown />
+            <VoteButtons
+              votes={answer.votesRel ?? []}
+              type={'answer'}
+              typeId={answer.$id}
+              authorId={answer.authorId}
+            />
             <DeleteAnswer
               answerId={answer.$id}
               authorId={answer.authorId}

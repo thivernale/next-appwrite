@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChevronDown, ChevronUp, ChevronUpCircle } from 'lucide-react';
 
 import { MDEditorPreview } from '@/components/MDEditor';
 import { Answers } from '@/components/Answers';
 import { Comments } from '@/components/Comments';
 import { AuthorInfo } from '@/components/AuthorInfo';
+import { VoteButtons } from '@/components/VoteButtons';
 import { QuestionContextProvider } from '@/context/QuestionContext';
 import { getQuestion } from '@/services/questionService';
 import { getAttachment } from '@/services/storageService';
@@ -67,10 +67,12 @@ export default function QuestionViewPage({
 
         <div className="flex gap-4">
           <div className="flex shrink-0 flex-col items-center gap-4">
-            TODO votes
-            <ChevronUp />
-            <ChevronUpCircle />
-            <ChevronDown />
+            <VoteButtons
+              votes={question.votesRel ?? []}
+              type={'question'}
+              typeId={question.$id}
+              authorId={question.authorId}
+            />
             <EditQuestion
               questionId={question.$id}
               questionTitle={question.title}

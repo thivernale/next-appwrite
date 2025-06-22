@@ -63,7 +63,7 @@ class AuthService {
   }
 
   public async updatePrefs<T extends Models.Preferences>(prefs: T) {
-    return await account.updatePrefs(prefs);
+    return await account.updatePrefs<T>(prefs);
   }
 }
 
