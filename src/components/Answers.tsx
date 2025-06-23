@@ -7,16 +7,21 @@ import { AddAnswer } from '@/components/AddAnswer';
 import { DeleteAnswer } from '@/components/DeleteAnswer';
 import { VoteButtons } from '@/components/VoteButtons';
 import { useQuestionContext } from '@/context/QuestionContext';
+import { populateAuthorUserPrefs } from '@/services/userPrefs';
+import { useAuthStore } from '@/store/Auth';
 
 export function Answers({ answers }: { answers: Document<Answer>[]; questionId: string }) {
   const [question, setQuestion] = useQuestionContext();
+  const { user } = useAuthStore();
 
   function handleDelete(id: string) {
-    // TODO traverse question and update author reputation
-    setQuestion({
-      ...question!,
-      answersRel: (question!.answersRel || []).filter((answer) => answer.$id !== id),
-    });
+    if (!user || !question) {
+      return;
+    }
+
+    question.answersRel = (question!.answersRel ?? []).filter((answer) => answer.$id !== id);
+
+    setQuestion(populateAuthorUserPrefs(question!, user.$id as string, user.prefs));
   }
 
   return (

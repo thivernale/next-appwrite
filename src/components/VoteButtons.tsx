@@ -1,9 +1,11 @@
-import { Answer, Document, Question, Vote } from '@/services/types';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import { useAuthStore } from '@/store/Auth';
-import { createVote, deleteVote } from '@/services/voteService';
 import { useEffect, useState } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { useAuthStore } from '@/store/Auth';
+import { Answer, Document, Question, Vote } from '@/services/types';
+import { populateAuthorUserPrefs } from '@/services/userPrefs';
 import { updateAuthorReputation } from '@/services/userService';
+import { createVote, deleteVote } from '@/services/voteService';
 import { useQuestionContext } from '@/context/QuestionContext';
 
 export function VoteButtons({
@@ -13,7 +15,7 @@ export function VoteButtons({
   authorId,
 }: {
   votes: Document<Vote>[];
-  type: 'question' | 'answer';
+  type: Vote['type'];
   typeId: string;
   authorId: string;
 }) {
@@ -26,8 +28,13 @@ export function VoteButtons({
     setUserVote(votes.find((v) => v.authorId === user?.$id));
   }, [votes, user]);
 
+  function getVoteDelta(direction: Vote['direction']) {
+    return direction === 'up' ? 1 : -1;
+  }
+
   function handleVote(direction: Vote['direction']) {
-    if (!user) {
+    if (!user || !question) {
+      toast.error('Please log in to vote');
       return;
     }
     if (userVote) {
@@ -35,20 +42,15 @@ export function VoteButtons({
       deleteVote(id)
         .then(async () => {
           setVotes((prevState) => prevState.filter((vote) => vote.$id !== id));
-          setUserVote(null);
-          const userPrefs = await handleUpdateAuthorReputation(direction === 'up' ? -1 : 1);
-          if (type === 'question' && question) {
-            // TODO propagate change (vote count and author reputation) upward
-            // TODO traverse question and update author reputation
-            setQuestion({
-              ...question,
-              votesRel: (question.votesRel || []).filter((vote) => vote.$id !== id),
-              author: { ...question.author, prefs: userPrefs! },
-            });
+          setUserVote(() => null);
+          const userPrefs = await handleUpdateAuthorReputation(-1 * getVoteDelta(direction));
+
+          if (type === 'question') {
+            question.votesRel = (question.votesRel ?? []).filter((vote) => vote.$id !== id);
           }
+          setQuestion(populateAuthorUserPrefs(question, authorId, userPrefs));
         })
-        .then(() => handleUpdateAuthorReputation(direction === 'up' ? -1 : 1))
-        .catch((reason) => console.log(reason));
+        .catch((reason) => toast.error(reason.message ?? 'Error deleting vote'));
 
       if (userVote.direction === direction) {
         return;
@@ -62,23 +64,20 @@ export function VoteButtons({
       type,
       typeId,
       answerRel: (type === 'answer' ? typeId : null) as unknown as Document<Answer>,
-      questionRel: (type !== 'answer' ? typeId : null) as unknown as Document<Question>,
+      questionRel: (type === 'question' ? typeId : null) as unknown as Document<Question>,
     };
     createVote(data)
       .then(async (vote) => {
         setVotes((prevState) => [...prevState, vote]);
-        setUserVote(vote);
-        const userPrefs = await handleUpdateAuthorReputation(direction === 'up' ? 1 : -1);
-        if (type === 'question' && question) {
-          // TODO propagate change upward
-          setQuestion({
-            ...question,
-            votesRel: [...(question.votesRel || []), vote],
-            author: { ...question.author, prefs: userPrefs! },
-          });
+        setUserVote(() => vote);
+        const userPrefs = await handleUpdateAuthorReputation(getVoteDelta(direction));
+
+        if (type === 'question') {
+          question.votesRel = [...(question.votesRel ?? []), vote];
         }
+        setQuestion(populateAuthorUserPrefs(question, authorId, userPrefs));
       })
-      .catch((reason) => console.log(reason));
+      .catch((reason) => toast.error(reason.message ?? 'Error saving vote'));
   }
 
   async function handleUpdateAuthorReputation(delta: number) {
@@ -107,7 +106,7 @@ export function VoteButtons({
       </button>
       <span className="font-bold">
         {votes
-          .map((vote) => (vote.direction === 'up' ? 1 : -1))
+          .map(({ direction }) => getVoteDelta(direction))
           .reduce((previousValue, currentValue) => previousValue + currentValue, 0)}
       </span>
       <button

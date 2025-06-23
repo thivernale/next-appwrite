@@ -6,6 +6,7 @@ import { MDEditor } from '@/components/MDEditor';
 import React, { useActionState, useState } from 'react';
 import { createAnswer } from '@/services/answerService';
 import { useQuestionContext } from '@/context/QuestionContext';
+import { populateAuthorUserPrefs } from '@/services/userPrefs';
 
 type FormState = {
   error?: { message: string; error?: unknown };
@@ -32,7 +33,7 @@ export function AddAnswer() {
         },
       };
     }
-    if (!content) {
+    if (!content || !question) {
       return {
         success: false,
         error: {
@@ -53,13 +54,11 @@ export function AddAnswer() {
       user.prefs.reputation = Number(user.prefs.reputation) + 1;
       await updateUserPreferences(user.prefs);
 
-      // TODO traverse question and update author reputation
-      setQuestion({
-        ...question!,
-        answersRel: [...(question!.answersRel || []), { ...result, author: user! }],
-      });
+      question.answersRel = [...(question.answersRel ?? []), { ...result, author: user }];
 
-      setContent('');
+      setQuestion(populateAuthorUserPrefs(question!, user.$id as string, user.prefs));
+
+      setContent(() => '');
 
       return { success: true };
     } catch (error) {
