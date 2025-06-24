@@ -5,6 +5,7 @@ import { ID, Models, Query } from 'appwrite';
 import { databases, users } from '@/models/server/config';
 import { DATABASE_ID, QUESTION_COLLECTION_ID } from '@/models/name';
 import { UserPreferences } from '@/store/Auth';
+import { getUser } from '@/services/userService';
 
 export async function searchQuestions({
   page = 1,
@@ -54,7 +55,7 @@ export async function getQuestion(id: string): Promise<Document<Question>> {
   return databases
     .getDocument<Document<Question>>(DATABASE_ID, QUESTION_COLLECTION_ID, id)
     .then(async (question) => {
-      const user = await users.get<UserPreferences>(question.authorId);
+      const user = await getUser<UserPreferences>(question.authorId);
 
       const authorPromises: Promise<void>[] = [
         getAuthors(question.answersRel || []),
