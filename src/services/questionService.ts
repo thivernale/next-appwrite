@@ -20,16 +20,19 @@ export async function searchQuestions({
     Query.offset((+page - 1) * limit),
     Query.select(['$id', '$createdAt', 'title', 'authorId', 'tags', 'answersRel.$id']),
   ];
-  if (search?.search !== '') {
+  if (search?.search) {
     queries.push(
       Query.or([Query.search('title', search.search), Query.search('content', search.search)]),
     );
   }
-  if (search?.tag !== '') {
+  if (search?.tag) {
     queries.push(Query.equal('tags', search.tag));
   }
+  if (search?.authorId) {
+    queries.push(Query.equal('authorId', search.authorId));
+  }
 
-  const questions = await databases.listDocuments<Models.Document & QuestionSummary>(
+  const questions = await databases.listDocuments<Document<QuestionSummary>>(
     DATABASE_ID,
     QUESTION_COLLECTION_ID,
     queries,
@@ -37,7 +40,7 @@ export async function searchQuestions({
 
   await getAuthors(questions.documents);
 
-  return questions as DocumentList<QuestionSummary>;
+  return questions;
 }
 
 async function getAuthors(documents: Models.Document[], authorIdProp: string = 'authorId') {

@@ -29,7 +29,7 @@ export function Answers({ answers }: { answers: Document<Answer>[]; questionId: 
       <h2 className="mb-4 text-xl font-bold">{answers.length ?? 0} Answers</h2>
 
       {answers?.map((answer) => (
-        <div key={answer.$id} className="flex gap-4">
+        <div key={answer.$id} className="target:bg-accent flex gap-4 p-1" id={answer.$id}>
           <div className="flex shrink-0 flex-col items-center gap-4">
             <VoteButtons
               votes={answer.votesRel ?? []}
