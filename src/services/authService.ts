@@ -42,6 +42,14 @@ class AuthService {
     }
   }
 
+  public async updateUser({ name }: RegisterType) {
+    try {
+      return await account.updateName(name);
+    } catch (e) {
+      throw e;
+    }
+  }
+
   public async login({ email, password }: LoginType) {
     return await account.createEmailPasswordSession(email, password);
   }

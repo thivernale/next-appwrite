@@ -32,7 +32,7 @@ export default function QuestionEditPage({
     if (question && (!user || user.$id !== question.authorId)) {
       router.push(`/forum/questions/${question.$id}/${slugify(question.title)}`);
     }
-  }, [question, user]);
+  }, [question, user, router]);
 
   if (!question || !user) return null;
 

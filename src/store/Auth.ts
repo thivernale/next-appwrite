@@ -94,6 +94,22 @@ export const useAuthStore = create<AuthState & AuthActions>()(
             }
           },
 
+          async updateUser({ name }): Promise<AppwriteResult> {
+            try {
+              const user = await authService.updateUser({ name });
+              set({ user });
+
+              return {
+                success: true,
+              };
+            } catch (e) {
+              return {
+                success: false,
+                error: e instanceof AppwriteException ? e : null,
+              };
+            }
+          },
+
           async logout(): Promise<void> {
             await authService.logout();
             set({ session: null, user: null, jwt: null });

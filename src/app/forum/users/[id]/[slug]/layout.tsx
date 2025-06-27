@@ -9,10 +9,7 @@ import { avatars } from '@/models/client/config';
 import { convertDateToRelativeTime } from '@/utils/relativeTime';
 import { IconClockFilled, IconUserFilled } from '@tabler/icons-react';
 import { Navbar } from '@/app/forum/users/[id]/[slug]/Navbar';
-
-/*export const metadata: Metadata = {
-  title: 'User Profile',
-};*/
+import { EditUser } from '@/app/forum/users/[id]/[slug]/EditUser';
 
 export default function UserLayout({
   children,
@@ -45,7 +42,7 @@ export default function UserLayout({
               className="rounded-lg"
             />
           </picture>
-          <div className="w-full">
+          <div className="flex w-full items-start gap-2">
             <div className="flex items-start justify-between">
               <div className="block space-y-1">
                 <h1 className="text-3xl font-bold">{author.name}</h1>
@@ -60,6 +57,7 @@ export default function UserLayout({
                 </p>
               </div>
             </div>
+            <EditUser authorId={author.$id} />
           </div>
         </div>
         <div className="flex flex-col gap-4 sm:flex-row">
