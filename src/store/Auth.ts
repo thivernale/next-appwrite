@@ -33,8 +33,7 @@ type AppwriteResult = {
 export const useAuthStore = create<AuthState & AuthActions>()(
   devtools(
     persist(
-      immer(
-        // persist stateCreatorFn
+      immer<AuthState & AuthActions>(
         (set, getState) => ({
           session: null,
           jwt: null,
@@ -97,7 +96,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 
           async updateUser({ name }): Promise<AppwriteResult> {
             try {
-              const user = await authService.updateUser({ name });
+              const user = await authService.updateUser<UserPreferences>({ name });
               set({ user });
 
               return {

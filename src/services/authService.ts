@@ -42,7 +42,9 @@ class AuthService {
     }
   }
 
-  public async updateUser({ name }: UpdateType) {
+  public async updateUser<T extends Models.Preferences>({
+    name,
+  }: UpdateType): Promise<Models.User<T>> {
     try {
       return await account.updateName(name);
     } catch (e) {
