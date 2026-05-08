@@ -1,17 +1,17 @@
-import { Pagination } from '@/components/Pagination';
 import { MDEditorPreview } from '@/components/MDEditor';
-import { convertDateToRelativeTime } from '@/utils/relativeTime';
-import Link from 'next/link';
-import { slugify } from '@/utils/slugify';
+import { Pagination } from '@/components/Pagination';
 import { searchAnswers } from '@/services/answerService';
+import { convertDateToRelativeTime } from '@/utils/relativeTime';
+import { slugify } from '@/utils/slugify';
+import Link from 'next/link';
 
 export default async function AuthorAnswersPage({
   params,
   searchParams,
-}: {
+}: Readonly<{
   params: Promise<{ id: string; slug: string }>;
   searchParams: Promise<{ page?: string }>;
-}) {
+}>) {
   const { id } = await params;
   const { page = '1' } = await searchParams;
   const LIMIT = 25;

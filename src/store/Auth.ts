@@ -1,8 +1,8 @@
+import { authService, LoginType, RegisterType, UpdateType } from '@/services/authService';
+import { AppwriteException, Models } from 'appwrite';
 import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { AppwriteException, Models } from 'appwrite';
-import { authService, LoginType, RegisterType } from '@/services/authService';
 
 export interface UserPreferences {
   reputation: number;
@@ -20,6 +20,7 @@ type AuthActions = {
   verifySession(): Promise<void>;
   login(l: LoginType): Promise<AppwriteResult>;
   createUser(r: RegisterType): Promise<AppwriteResult>;
+  updateUser(r: UpdateType): Promise<AppwriteResult>;
   logout(): Promise<void>;
   updateUserPreferences(prefs: UserPreferences): Promise<void>;
 };

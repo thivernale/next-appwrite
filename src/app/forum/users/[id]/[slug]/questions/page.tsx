@@ -1,14 +1,14 @@
-import { searchQuestions } from '@/services/questionService';
-import { QuestionCard } from '@/components/QuestionCard';
 import { Pagination } from '@/components/Pagination';
+import { QuestionCard } from '@/components/QuestionCard';
+import { searchQuestions } from '@/services/questionService';
 
 export default async function AuthorQuestionsPage({
   params,
   searchParams,
-}: {
+}: Readonly<{
   params: Promise<{ id: string; slug: string }>;
   searchParams: Promise<{ page?: string }>;
-}) {
+}>) {
   const { id } = await params;
   const { page = '1' } = await searchParams;
   const LIMIT = 25;

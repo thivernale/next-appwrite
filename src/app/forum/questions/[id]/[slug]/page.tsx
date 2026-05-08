@@ -1,27 +1,27 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { DeleteQuestion } from '@/app/forum/questions/[id]/[slug]/DeleteQuestion';
+import { EditQuestion } from '@/app/forum/questions/[id]/[slug]/EditQuestion';
+import { Answers } from '@/components/Answers';
+import { AuthorInfo } from '@/components/AuthorInfo';
+import { Comments } from '@/components/Comments';
 
 import { MDEditorPreview } from '@/components/MDEditor';
-import { Answers } from '@/components/Answers';
-import { Comments } from '@/components/Comments';
-import { AuthorInfo } from '@/components/AuthorInfo';
 import { VoteButtons } from '@/components/VoteButtons';
 import { QuestionContextProvider } from '@/context/QuestionContext';
 import { getQuestion } from '@/services/questionService';
 import { getAttachment } from '@/services/storageService';
 import { Document, Question } from '@/services/types';
 import { convertDateToRelativeTime } from '@/utils/relativeTime';
-import { DeleteQuestion } from '@/app/forum/questions/[id]/[slug]/DeleteQuestion';
-import { EditQuestion } from '@/app/forum/questions/[id]/[slug]/EditQuestion';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function QuestionViewPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ id: string; slug: string }>;
-}) {
+}>) {
   const [question, setQuestion] = useState<Document<Question>>();
   const router = useRouter();
 

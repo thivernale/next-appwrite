@@ -1,14 +1,12 @@
-'use client';
-
-import React, { useActionState, useState } from 'react';
 import { useAuthStore } from '@/store/Auth';
+import React, { useActionState, useState } from 'react';
 
 type FormState = {
   error?: { message: string; error?: unknown };
   success?: boolean;
 };
 
-export function AddComment({ onSubmit }: { onSubmit: (arg0: string) => Promise<void> }) {
+export function AddComment({ onSubmit }: Readonly<{ onSubmit: (arg0: string) => Promise<void> }>) {
   const [content, setContent] = useState('');
   const { user } = useAuthStore();
 
@@ -42,7 +40,6 @@ export function AddComment({ onSubmit }: { onSubmit: (arg0: string) => Promise<v
 
       return { success: true };
     } catch (error) {
-      // console.error(error);
       return {
         success: false,
         error:
@@ -74,7 +71,7 @@ export function AddComment({ onSubmit }: { onSubmit: (arg0: string) => Promise<v
         ></textarea>
         <button
           className="bg-accent hover:bg-accent/30 shrink-0 rounded-md px-4 py-2 font-bold disabled:text-gray-400"
-          disabled={!Boolean(content) || isPending}
+          disabled={!content || isPending}
         >
           Add Comment
         </button>

@@ -1,19 +1,19 @@
-import { Pagination } from '@/components/Pagination';
-import { searchVotes } from '@/services/voteService';
-import { slugify } from '@/utils/slugify';
-import Link from 'next/link';
-import { Document, QuestionSummary, Vote } from '@/services/types';
 import { Navbar } from '@/app/forum/users/[id]/[slug]/votes/Navbar';
+import { Pagination } from '@/components/Pagination';
+import { Document, QuestionSummary, Vote } from '@/services/types';
+import { searchVotes } from '@/services/voteService';
 import { convertDateToRelativeTime } from '@/utils/relativeTime';
+import { slugify } from '@/utils/slugify';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import Link from 'next/link';
 
 export default async function AuthorVotesPage({
   params,
   searchParams,
-}: {
+}: Readonly<{
   params: Promise<{ id: string; slug: string }>;
   searchParams: Promise<{ page?: string; direction?: Vote['direction'] }>;
-}) {
+}>) {
   const { id } = await params;
   const { page = '1', direction = '' } = await searchParams;
   const LIMIT = 25;
@@ -62,7 +62,7 @@ export default async function AuthorVotesPage({
                 )}
               </p>
               {getQuestionLink(
-                questionRel ? questionRel : answerRel!.questionRel,
+                questionRel ?? answerRel!.questionRel,
                 questionRel ? undefined : answerRel!.$id,
               )}
             </div>

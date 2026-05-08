@@ -1,14 +1,14 @@
-import Link from 'next/link';
 import { Search } from '@/app/forum/questions/Search';
-import { searchQuestions } from '@/services/questionService';
-import { QuestionCard } from '@/components/QuestionCard';
 import { Pagination } from '@/components/Pagination';
+import { QuestionCard } from '@/components/QuestionCard';
+import { searchQuestions } from '@/services/questionService';
+import Link from 'next/link';
 
 export default async function QuestionListPage({
   searchParams,
-}: {
+}: Readonly<{
   searchParams: Promise<{ page?: string; tag?: string; search?: string }>;
-}) {
+}>) {
   const { page = '1', search = '', tag = '' } = await searchParams;
 
   const LIMIT = 25;

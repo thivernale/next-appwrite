@@ -1,8 +1,8 @@
-import { avatars } from '@/models/client/config';
 import { AuthorLink } from '@/components/AuthorLink';
+import { avatars } from '@/models/client/config';
 import { Author } from '@/services/types';
 
-export function AuthorInfo({ author }: { author: Author }) {
+export function AuthorInfo({ author }: Readonly<{ author: Author }>) {
   return (
     <div className="flex items-center justify-start gap-2">
       <picture>

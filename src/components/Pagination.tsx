@@ -2,12 +2,12 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-export function Pagination({ total = 0, limit = 25 }: { total: number; limit: number }) {
+export function Pagination({ total = 0, limit = 25 }: Readonly<{ total: number; limit: number }>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const page = searchParams.get('page') || '1';
-  const pageNumber = parseInt(page);
+  const pageNumber = Number.parseInt(page);
   const totalPages = total ? Math.ceil(total / limit) : 1;
 
   function handleNavigate(offset: -1 | 1) {

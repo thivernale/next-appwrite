@@ -1,11 +1,11 @@
 'use client';
 
-import { useAuthStore } from '@/store/Auth';
-import React, { useActionState, useEffect, useState } from 'react';
-import { redirect } from 'next/navigation';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useAuthStore } from '@/store/Auth';
 import { slugify } from '@/utils/slugify';
+import { redirect } from 'next/navigation';
+import React, { useActionState, useEffect, useState } from 'react';
 
 type FormState = {
   error?: { message: string };
@@ -49,7 +49,7 @@ export default function AuthorEditPage({
       return updateResult;
     }
 
-    redirect(`/forum/users/${user.$id}/${slugify(firstname + ' ' + lastname)}/edit`);
+    redirect(`/forum/users/${user?.$id}/${slugify(firstname + ' ' + lastname)}/edit`);
 
     return updateResult;
   }
@@ -57,7 +57,7 @@ export default function AuthorEditPage({
   useEffect(() => {
     params
       .then(({ id }) => {
-        if (user.$id === (id as string)) {
+        if (user?.$id === id) {
           const [firstname, ...lastname] = user.name.split(' ');
           setFormData({ firstname, lastname: lastname.join(' ') });
         } else {

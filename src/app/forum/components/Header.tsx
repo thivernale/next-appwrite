@@ -1,9 +1,9 @@
 'use client';
 
-import { useAuthStore } from '@/store/Auth';
 import { FloatingNav, NavItem } from '@/components/ui/floating-navbar';
-import { IconHome, IconMessage, IconWorldQuestion } from '@tabler/icons-react';
+import { useAuthStore } from '@/store/Auth';
 import { slugify } from '@/utils/slugify';
+import { IconHome, IconMessage, IconWorldQuestion } from '@tabler/icons-react';
 
 export function Header() {
   const { session, user, logout } = useAuthStore();
@@ -23,13 +23,21 @@ export function Header() {
   if (user) {
     navItems.push({
       name: 'Profile',
-      link: `/forum/users/${user.$id}/${slugify(user.name as string)}`,
+      link: `/forum/users/${user.$id}/${slugify(user.name)}`,
       icon: <IconMessage className="h-4 w-4 text-neutral-500 dark:text-white" />,
     });
   }
 
   let authItems: NavItem[] = [];
-  if (!session) {
+  if (session) {
+    authItems = [
+      {
+        name: 'Logout',
+        onClick: logout,
+        link: '',
+      },
+    ];
+  } else {
     authItems = [
       {
         name: 'Login',
@@ -38,14 +46,6 @@ export function Header() {
       {
         name: 'Register',
         link: '/forum/register',
-      },
-    ];
-  } else {
-    authItems = [
-      {
-        name: 'Logout',
-        onClick: logout,
-        link: '',
       },
     ];
   }

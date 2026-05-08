@@ -2,8 +2,8 @@ import { account, ID } from '@/models/client/config';
 import { Models } from 'appwrite';
 
 export type RegisterType = { email: string; password: string; name: string };
-
-export type LoginType = { email: string; password: string };
+export type UpdateType = Pick<RegisterType, 'name'>;
+export type LoginType = Pick<RegisterType, 'email' | 'password'>;
 
 class AuthService {
   private static authService: AuthService;
@@ -42,7 +42,7 @@ class AuthService {
     }
   }
 
-  public async updateUser({ name }: RegisterType) {
+  public async updateUser({ name }: UpdateType) {
     try {
       return await account.updateName(name);
     } catch (e) {

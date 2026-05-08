@@ -1,21 +1,21 @@
-import { convertDateToRelativeTime } from '@/utils/relativeTime';
-import { Answer, Comment, Document, Question } from '@/services/types';
-import { AuthorLink } from '@/components/AuthorLink';
-import { useAuthStore } from '@/store/Auth';
-import { Trash2 } from 'lucide-react';
-import { createComment, deleteComment } from '@/services/commentService';
-import { useState } from 'react';
 import { AddComment } from '@/components/AddComment';
+import { AuthorLink } from '@/components/AuthorLink';
+import { createComment, deleteComment } from '@/services/commentService';
+import { Answer, Comment, Document, Question } from '@/services/types';
+import { useAuthStore } from '@/store/Auth';
+import { convertDateToRelativeTime } from '@/utils/relativeTime';
+import { Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 export function Comments({
   comments: initialComments,
   type,
   typeId,
-}: {
+}: Readonly<{
   comments: Document<Comment>[];
   type: 'question' | 'answer';
   typeId: string;
-}) {
+}>) {
   const { user } = useAuthStore();
   const [comments, setComments] = useState(initialComments);
 
@@ -38,7 +38,7 @@ export function Comments({
       type,
       typeId,
       answerRel: (type === 'answer' ? typeId : null) as unknown as Document<Answer>,
-      questionRel: (type !== 'answer' ? typeId : null) as unknown as Document<Question>,
+      questionRel: (type === 'question' ? typeId : null) as unknown as Document<Question>,
     };
 
     return createComment(data).then((comment) => {

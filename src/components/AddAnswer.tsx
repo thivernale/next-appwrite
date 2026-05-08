@@ -1,12 +1,12 @@
 'use client';
 
-import { useAuthStore } from '@/store/Auth';
-import { Document, Question } from '@/services/types';
 import { MDEditor } from '@/components/MDEditor';
-import React, { useActionState, useState } from 'react';
-import { createAnswer } from '@/services/answerService';
 import { useQuestionContext } from '@/context/QuestionContext';
+import { createAnswer } from '@/services/answerService';
+import { Document, Question } from '@/services/types';
 import { populateAuthorUserPrefs } from '@/services/userPrefs';
+import { useAuthStore } from '@/store/Auth';
+import React, { useActionState, useState } from 'react';
 
 type FormState = {
   error?: { message: string; error?: unknown };
@@ -46,7 +46,7 @@ export function AddAnswer() {
       const result = await createAnswer({
         questionId,
         content,
-        authorId: user!.$id as string,
+        authorId: user.$id,
         commentsRel: [],
         questionRel: questionId as unknown as Document<Question>,
       });
@@ -56,13 +56,12 @@ export function AddAnswer() {
 
       question.answersRel = [...(question.answersRel ?? []), { ...result, author: user }];
 
-      setQuestion(populateAuthorUserPrefs(question!, user.$id as string, user.prefs));
+      setQuestion(populateAuthorUserPrefs(question, user.$id, user.prefs));
 
       setContent(() => '');
 
       return { success: true };
     } catch (error) {
-      // console.error(error);
       return {
         success: false,
         error:
@@ -89,7 +88,7 @@ export function AddAnswer() {
 
         <button
           className="bg-accent hover:bg-accent/30 rounded-md px-4 py-2 disabled:text-gray-400"
-          disabled={!Boolean(content) || isPending}
+          disabled={!content || isPending}
         >
           Post Your Answer
         </button>

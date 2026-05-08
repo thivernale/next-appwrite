@@ -9,19 +9,22 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { deleteQuestion } from '@/services/questionService';
 import { useAuthStore } from '@/store/Auth';
 import { Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { deleteQuestion } from '@/services/questionService';
 import { useRef } from 'react';
 import toast from 'react-hot-toast';
 
-export function DeleteQuestion({ questionId, authorId }: { questionId: string; authorId: string }) {
+export function DeleteQuestion({
+  questionId,
+  authorId,
+}: Readonly<{ questionId: string; authorId: string }>) {
   const { user } = useAuthStore();
   const router = useRouter();
   const ref = useRef<HTMLButtonElement | null>(null);
 
-  if (!user || authorId !== user.$id) {
+  if (authorId !== user?.$id) {
     return null;
   }
 

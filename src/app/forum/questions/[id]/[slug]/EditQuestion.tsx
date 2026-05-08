@@ -1,20 +1,20 @@
 import { useAuthStore } from '@/store/Auth';
-import Link from 'next/link';
-import { Pencil } from 'lucide-react';
 import { slugify } from '@/utils/slugify';
+import { Pencil } from 'lucide-react';
+import Link from 'next/link';
 
 export function EditQuestion({
   questionId,
   questionTitle,
   authorId,
-}: {
+}: Readonly<{
   questionId: string;
   questionTitle: string;
   authorId: string;
-}) {
+}>) {
   const { user } = useAuthStore();
 
-  if (!user || authorId !== user.$id) {
+  if (authorId !== user?.$id) {
     return null;
   }
 

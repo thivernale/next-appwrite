@@ -1,16 +1,18 @@
-import { MDEditorPreview } from '@/components/MDEditor';
-import { convertDateToRelativeTime } from '@/utils/relativeTime';
-import { Comments } from '@/components/Comments';
-import { Answer, Document } from '@/services/types';
-import { AuthorInfo } from '@/components/AuthorInfo';
 import { AddAnswer } from '@/components/AddAnswer';
+import { AuthorInfo } from '@/components/AuthorInfo';
+import { Comments } from '@/components/Comments';
 import { DeleteAnswer } from '@/components/DeleteAnswer';
+import { MDEditorPreview } from '@/components/MDEditor';
 import { VoteButtons } from '@/components/VoteButtons';
 import { useQuestionContext } from '@/context/QuestionContext';
+import { Answer, Document } from '@/services/types';
 import { populateAuthorUserPrefs } from '@/services/userPrefs';
 import { useAuthStore } from '@/store/Auth';
+import { convertDateToRelativeTime } from '@/utils/relativeTime';
 
-export function Answers({ answers }: { answers: Document<Answer>[]; questionId: string }) {
+export function Answers({
+  answers,
+}: Readonly<{ answers: Document<Answer>[]; questionId: string }>) {
   const [question, setQuestion] = useQuestionContext();
   const { user } = useAuthStore();
 
@@ -19,9 +21,9 @@ export function Answers({ answers }: { answers: Document<Answer>[]; questionId: 
       return;
     }
 
-    question.answersRel = (question!.answersRel ?? []).filter((answer) => answer.$id !== id);
+    question.answersRel = (question.answersRel ?? []).filter((answer) => answer.$id !== id);
 
-    setQuestion(populateAuthorUserPrefs(question!, user.$id as string, user.prefs));
+    setQuestion(populateAuthorUserPrefs(question, user.$id, user.prefs));
   }
 
   return (

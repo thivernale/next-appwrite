@@ -1,10 +1,10 @@
-import { Document, QuestionSummary } from '@/services/types';
-import Link from 'next/link';
 import { avatars } from '@/models/client/config';
-import { slugify } from '@/utils/slugify';
+import { Document, QuestionSummary } from '@/services/types';
 import { convertDateToRelativeTime } from '@/utils/relativeTime';
+import { slugify } from '@/utils/slugify';
+import Link from 'next/link';
 
-export function QuestionCard({ question }: { question: Document<QuestionSummary> }) {
+export function QuestionCard({ question }: Readonly<{ question: Document<QuestionSummary> }>) {
   return (
     <div className="border-accent/20 bg-accent/5 hover:bg-accent/10 relative flex flex-col gap-4 overflow-hidden rounded-xl border p-4 duration-200 sm:flex-row">
       <div className="relative shrink-0 text-sm sm:text-right">

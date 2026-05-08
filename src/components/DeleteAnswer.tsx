@@ -9,25 +9,25 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { deleteAnswer } from '@/services/answerService';
 import { useAuthStore } from '@/store/Auth';
 import { Trash2 } from 'lucide-react';
 import { useRef } from 'react';
 import toast from 'react-hot-toast';
-import { deleteAnswer } from '@/services/answerService';
 
 export function DeleteAnswer({
   answerId,
   authorId,
   onDelete = () => {},
-}: {
+}: Readonly<{
   answerId: string;
   authorId: string;
   onDelete: () => void;
-}) {
+}>) {
   const { user, updateUserPreferences } = useAuthStore();
   const ref = useRef<HTMLButtonElement | null>(null);
 
-  if (!user || authorId !== user.$id) {
+  if (authorId !== user?.$id) {
     return null;
   }
 

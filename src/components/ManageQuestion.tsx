@@ -1,18 +1,18 @@
 'use client';
 
 import { MDEditor } from '@/components/MDEditor';
-import React, { useActionState, useRef, useState } from 'react';
-import { useAuthStore } from '@/store/Auth';
-import { Document, Question } from '@/services/types';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { createAttachment, deleteAttachment } from '@/services/storageService';
-import { createQuestion, updateQuestion } from '@/services/questionService';
-import { useRouter } from 'next/navigation';
-import { slugify } from '@/utils/slugify';
-import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { createQuestion, updateQuestion } from '@/services/questionService';
+import { createAttachment, deleteAttachment } from '@/services/storageService';
+import { Document, Question } from '@/services/types';
+import { useAuthStore } from '@/store/Auth';
+import { slugify } from '@/utils/slugify';
 import { AppwriteException } from 'appwrite';
+import { X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import React, { useActionState, useRef, useState } from 'react';
 
 const FormControlContainer = ({
   children,
@@ -33,7 +33,9 @@ type FormState = {
   success?: boolean;
 };
 
-export function ManageQuestion({ question: initialQuestion }: { question?: Document<Question> }) {
+export function ManageQuestion({
+  question: initialQuestion,
+}: Readonly<{ question?: Document<Question> }>) {
   const id = initialQuestion?.$id;
 
   const [question, setQuestion] = useState<Question>({
@@ -91,12 +93,11 @@ export function ManageQuestion({ question: initialQuestion }: { question?: Docum
       }
       question.authorId = user.$id;
 
-      const result = !id ? await createQuestion(question) : await updateQuestion(id, question);
+      const result = id ? await updateQuestion(id, question) : await createQuestion(question);
       router.push(`/forum/questions/${result.$id}/${slugify(question.title)}`);
 
       return { success: true };
     } catch (error) {
-      //console.error(error);
       return {
         success: false,
         error:

@@ -1,13 +1,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+/*@custom-variant dark (&:is(.dark *));*/
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: var(--color-green-400); /* "#f02e65" */
-  --color-secondary: var(--color-green-700); /* "#fe9684" */
+  --color-primary: var(--primary-custom); /* "#f02e65" */
+  --color-secondary: var(--secondary-custom); /* "#fe9684" */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -44,6 +44,8 @@
 }
 
 :root {
+  --primary-custom: var(--color-green-500);
+  --secondary-custom: var(--color-green-700);
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
@@ -79,6 +81,8 @@
 }
 
 .dark {
+  --primary-custom: var(--color-green-300);
+  --secondary-custom: var(--color-green-600);
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
   --card: oklch(0.208 0.042 265.755);

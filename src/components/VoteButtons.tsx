@@ -1,24 +1,24 @@
-import { useEffect, useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import toast from 'react-hot-toast';
-import { useAuthStore } from '@/store/Auth';
+import { useQuestionContext } from '@/context/QuestionContext';
 import { Answer, Document, Question, Vote } from '@/services/types';
 import { populateAuthorUserPrefs } from '@/services/userPrefs';
 import { updateAuthorReputation } from '@/services/userService';
 import { createVote, deleteVote } from '@/services/voteService';
-import { useQuestionContext } from '@/context/QuestionContext';
+import { useAuthStore } from '@/store/Auth';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 export function VoteButtons({
   votes: initialVotes,
   type,
   typeId,
   authorId,
-}: {
+}: Readonly<{
   votes: Document<Vote>[];
   type: Vote['type'];
   typeId: string;
   authorId: string;
-}) {
+}>) {
   const [question, setQuestion] = useQuestionContext();
   const { user, updateUserPreferences } = useAuthStore();
   const [votes, setVotes] = useState(initialVotes);

@@ -1,18 +1,18 @@
 'use client';
 
 import { ManageQuestion } from '@/components/ManageQuestion';
-import React, { useEffect, useState } from 'react';
 import { getQuestion } from '@/services/questionService';
-import { useAuthStore } from '@/store/Auth';
 import { Document, Question } from '@/services/types';
-import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/Auth';
 import { slugify } from '@/utils/slugify';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
 export default function QuestionEditPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ id: string; slug: string }>;
-}) {
+}>) {
   const { user } = useAuthStore();
   const [question, setQuestion] = useState<Document<Question>>();
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function QuestionEditPage({
   }, [setQuestion, params, router]);
 
   useEffect(() => {
-    if (question && (!user || user.$id !== question.authorId)) {
+    if (question && user?.$id !== question.authorId) {
       router.push(`/forum/questions/${question.$id}/${slugify(question.title)}`);
     }
   }, [question, user, router]);

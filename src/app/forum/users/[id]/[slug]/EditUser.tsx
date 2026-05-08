@@ -1,13 +1,13 @@
 'use client';
 
 import { useAuthStore } from '@/store/Auth';
-import Link from 'next/link';
 import { slugify } from '@/utils/slugify';
+import Link from 'next/link';
 
-export function EditUser({ authorId }: { authorId: string }) {
+export function EditUser({ authorId }: Readonly<{ authorId: string }>) {
   const { user } = useAuthStore();
 
-  if (!user || authorId !== user.$id) {
+  if (authorId !== user?.$id) {
     return null;
   }
 
