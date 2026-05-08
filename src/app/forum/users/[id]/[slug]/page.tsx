@@ -20,9 +20,7 @@ export default async function AuthorSummaryPage({
       limit: 1,
       search: { authorId: id },
     }),
-  ]).catch((err) => {
-    console.error(err);
-  });
+  ]);
 
   return (
     author && (
