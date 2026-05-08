@@ -4,13 +4,17 @@ import { databases } from '@/models/server/config';
 import { DATABASE_ID, VOTE_COLLECTION_ID } from '@/models/name';
 import { ID, Query } from 'appwrite';
 import { Document, DocumentList, SearchParams, Vote } from '@/services/types';
+import { Permission, Role } from 'node-appwrite';
 
 export async function deleteVote(documentId: string): Promise<object> {
   return databases.deleteDocument(DATABASE_ID, VOTE_COLLECTION_ID, documentId);
 }
 
 export async function createVote(data: Vote): Promise<Document<Vote>> {
-  return databases.createDocument(DATABASE_ID, VOTE_COLLECTION_ID, ID.unique(), data);
+  return databases.createDocument(DATABASE_ID, VOTE_COLLECTION_ID, ID.unique(), data, [
+    Permission.read(Role.any()),
+    Permission.delete(Role.user(data.authorId)),
+  ]);
 }
 
 export async function searchVotes({

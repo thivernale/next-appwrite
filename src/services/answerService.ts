@@ -4,6 +4,7 @@ import { Answer, Document, DocumentList, SearchParams } from '@/services/types';
 import { databases, ID } from '@/models/server/config';
 import { ANSWER_COLLECTION_ID, DATABASE_ID } from '@/models/name';
 import { Query } from 'appwrite';
+import { Permission, Role } from 'node-appwrite';
 
 export async function createAnswer(data: Answer): Promise<Document<Answer>> {
   return databases.createDocument<Document<Answer>>(
@@ -11,6 +12,11 @@ export async function createAnswer(data: Answer): Promise<Document<Answer>> {
     ANSWER_COLLECTION_ID,
     ID.unique(),
     data,
+    [
+      Permission.read(Role.any()),
+      Permission.update(Role.user(data.authorId)),
+      Permission.delete(Role.user(data.authorId)),
+    ],
   );
 }
 

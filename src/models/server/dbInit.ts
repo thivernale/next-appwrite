@@ -22,8 +22,8 @@ export async function getOrCreateDatabase(): Promise<Models.Database> {
 
       return databases.create(DATABASE_ID, DATABASE_ID);
     })
-    .then((db) => {
-      databases.listCollections(db.$id).then(async (collectionList) => {
+    .then(async (db) => {
+      await databases.listCollections(db.$id).then(async (collectionList) => {
         const createCollectionMap = new Map<string, (dbId: string) => Promise<Collection | void>>([
           [QUESTION_COLLECTION_ID, createQuestionCollection],
           [ANSWER_COLLECTION_ID, createAnswerCollection],

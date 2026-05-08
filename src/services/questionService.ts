@@ -3,6 +3,7 @@
 import { Document, DocumentList, Question, QuestionSummary, SearchParams } from '@/services/types';
 import { ID, Models, Query } from 'appwrite';
 import { databases, users } from '@/models/server/config';
+import { Permission, Role } from 'node-appwrite';
 import { DATABASE_ID, QUESTION_COLLECTION_ID } from '@/models/name';
 import { UserPreferences } from '@/store/Auth';
 import { getUser } from '@/services/userService';
@@ -75,7 +76,11 @@ export async function getQuestion(id: string): Promise<Document<Question>> {
 }
 
 export async function createQuestion(data: Question): Promise<Document<Question>> {
-  return await databases.createDocument(DATABASE_ID, QUESTION_COLLECTION_ID, ID.unique(), data);
+  return await databases.createDocument(DATABASE_ID, QUESTION_COLLECTION_ID, ID.unique(), data, [
+    Permission.read(Role.any()),
+    Permission.update(Role.user(data.authorId)),
+    Permission.delete(Role.user(data.authorId)),
+  ]);
 }
 
 export async function updateQuestion(id: string, data: Question): Promise<Document<Question>> {
